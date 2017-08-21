@@ -1,0 +1,108 @@
+<HTML>
+    <HEAD>
+        <TITLE>Client 2 Registration</TITLE>  
+		<script>
+			function submitRegistrationReq()
+			{
+				var getSearchKeyNameUrl = "http://localhost:8080/LWM2M_AssyRobo/omaclient/Registration/6F6G-8H9I-12052015";
+				var ajaxHttpReq;
+
+				if (window.XMLHttpRequest) {
+				 	ajaxHttpReq=new XMLHttpRequest();
+				} 
+				else {
+					ajaxHttpReq=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				ajaxHttpReq.onreadystatechange = function() {
+				if (ajaxHttpReq.readyState == 4 && ajaxHttpReq.status == 200) {
+				 		var servletRes = ajaxHttpReq.responseText;
+				 		document.getElementById("resMessage").innerText = servletRes;
+				 		if(servletRes.indexOf("failed") != -1){
+				 			document.getElementById("resMessage").style.color = '#FF0000';
+				 		}
+				 		else {
+				 			document.getElementById("resMessage").style.color = '#088A08';
+				 		}
+				   }
+				}
+				ajaxHttpReq.open("POST", getSearchKeyNameUrl, true);
+				ajaxHttpReq.setRequestHeader("Content-type","application/json;charset=UTF-8");
+				ajaxHttpReq.send(
+						JSON.stringify(
+										{
+											REGISTRATIONREQUEST : {
+												LIFETIME : document.getElementById("lifetime").value, 
+												BINDING_MODE : document.getElementById("bindingMode").value, 
+												SMS_NUMBER : document.getElementById("smsNbr").value,
+												ENDPOINT_ROBO_URL : document.getElementById("endUrl").value
+											}
+										}
+									   )
+						);
+			}
+		</script>	
+    </HEAD>
+
+    <BODY BGCOLOR="#C1C1BB">
+		<div>	
+			<br>
+			<br>
+			<div>
+				<H1 align="center" FACE="Times New Roman">Request registration for the Assembly Robot</H1>
+			</div>
+			<br>
+			<div style="font-weight: bold; font-style: italic; font-size: 20px; font-family: Times New Roman; text-align: center" id="resMessage">  
+			</div>	
+		    <br>
+			<div align="center">
+				<table id="registerClientData">
+					<tr>
+						<td align="left" id="lifetimeNM">LIFETIME:</td>
+						<td align="left">
+							<input type="text" name="lifetime" id="lifetime" style="width: 320px;" value="86400" >
+						</td>
+					</tr>
+					<tr>
+						<td align="left" id="bindingModeNM">BINDING_MODE:</td>
+						<td align="left">
+							<input type="text" name="bindingMode" id="bindingMode" style="width: 320px;" value="S" >
+						</td>
+					</tr>
+					<tr>
+						<td align="left" id="smsNbrNM">SMS_NUMBER:</td>
+						<td align="left">
+							<input type="text" name="smsNbr" id="smsNbr" style="width: 320px;" value="H8I9J1K1L2M3" >
+						</td>
+					</tr>
+					<tr>
+						<td align="left" id="endUrlNM">ENDPOINT_ROBO_URL</td>
+						<td align="left">
+							<input type="text" name="endUrl" id="endUrl" style="width: 320px;" value="http://localhost:8080/LWM2M_AssyRobo/omaclient" >
+						</td>
+					</tr>
+					<tr>
+						<td><br></td>
+						<td><br></td>
+					</tr>
+					<tr>
+						<td>
+				        	<button type="button" name="reqRegistration" id="reqRegistration" onclick='return submitRegistrationReq();' >
+					        	<Strong>
+					        		<FONT COLOR=BLACK FACE="Times New Roman" SIZE=4>
+					        			<i>Request Registration</i>
+					        		</FONT>
+					        	</Strong>
+				        	</button>
+						</td>
+						<td></td>
+					</tr>
+				</table>			
+			</div>
+			<br>
+			<div align="center">
+				<a href=Index.html> <Strong><FONT COLOR=#0000FF FACE="Times New Roman" SIZE=3><i>Back to Index</i></FONT></Strong></a>
+			</div>
+		</div>
+    </BODY>
+</HTML>

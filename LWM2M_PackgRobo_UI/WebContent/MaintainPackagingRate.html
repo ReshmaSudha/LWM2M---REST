@@ -1,0 +1,145 @@
+<HTML>
+    <HEAD>
+        <TITLE>Update Rate</TITLE>  
+        <script>
+	        function resetClient() {
+	        	location.reload(true);
+	        }        
+        </script> 
+        <script>
+        	var myVar = setInterval(setStatus, 10000);
+	        function setStatus() {
+				var getSearchKeyNameUrl = "http://localhost:8080/LWM2M_PackgRobo/omaclient/GetStatus";
+				var ajaxHttpReq;
+
+				if (window.XMLHttpRequest) {
+				 	ajaxHttpReq=new XMLHttpRequest();
+				} 
+				else {
+					ajaxHttpReq=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				ajaxHttpReq.onreadystatechange = function() {
+					if (ajaxHttpReq.readyState == 4 && ajaxHttpReq.status == 200) {
+				 		var servletRes = ajaxHttpReq.responseText;
+				 		var obj = JSON.parse(servletRes);
+				 		
+				 		if(servletRes.indexOf("failed") != -1){
+				 			document.getElementById("resMessage").innerText = servletRes;
+				 			document.getElementById("resMessage").style.color = '#FF0000';
+				 		}
+				 		else {
+					 		if (servletRes.indexOf("STOP") != -1){
+					 			document.getElementById("statusVal").value = 'STOPPED';
+					 			document.getElementById("rateVal").value = 0;
+					 			document.getElementById("status").style.color = '#FF0000';
+					 			document.getElementById("resMessage").innerText = '';
+					 		} else {
+					 			document.getElementById("statusVal").value = obj.STATUSRESPONSE.STATUS;
+					 			document.getElementById("rateVal").value = obj.STATUSRESPONSE.NORMAL_RATE;
+					 			document.getElementById("status").style.color = '#000000';
+					 			document.getElementById("resMessage").innerText = '';
+					 		}
+				 		}
+				   }
+				}
+				ajaxHttpReq.open("GET", getSearchKeyNameUrl, true);
+				ajaxHttpReq.send();	    
+				updatePackagingRate();
+	        }        
+        </script>        
+		<script>
+			//var myVar = setInterval(updateQARate, 40000);
+			function updatePackagingRate()
+			{
+				//setStatus();
+				var getSearchKeyNameUrl = "http://localhost:8080/LWM2M_PackgRobo/omaclient/UpdateRate/7G7H-9I1J-12052015";
+				var ajaxHttpReq;
+
+				if (window.XMLHttpRequest) {
+				 	ajaxHttpReq=new XMLHttpRequest();
+				} 
+				else {
+					ajaxHttpReq=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				ajaxHttpReq.onreadystatechange = function() {
+				if (ajaxHttpReq.readyState == 4 && ajaxHttpReq.status == 200) {
+				 		var servletRes = ajaxHttpReq.responseText;
+				 		//document.getElementById("resMessage").innerText = servletRes;
+				 		if(servletRes.indexOf("failed") != -1){
+				 			document.getElementById("resMessage").style.color = '#FF0000';
+				 		}
+				 		else {
+				 			document.getElementById("resMessage").style.color = '#088A08';
+					 		if (servletRes.indexOf("CRITICAL") != -1){
+					 			document.getElementById("resMessage").style.color = '#FF0000';
+					 			document.getElementById("statusVal").value = 'STOPPED';
+					 			document.getElementById("status").style.color = '#FF0000';
+					 		}
+				 			
+				 		}
+				   }
+				}
+				ajaxHttpReq.open("POST", getSearchKeyNameUrl, true);
+				ajaxHttpReq.setRequestHeader("Content-type","application/json;charset=UTF-8");
+				ajaxHttpReq.send(
+						JSON.stringify(
+										{
+											PRODRATEUPDATEREQUEST : {
+												RATE : document.getElementById("rateVal").value,
+												STATUS : document.getElementById("statusVal").value
+											}
+										}
+									   )
+						);
+			}
+		</script>	
+    </HEAD>
+
+    <BODY BGCOLOR="#C1C1BB">
+		<div>	
+			<br>
+			<br>
+			<div>
+				<H1 align="center" FACE="Times New Roman">Notify packing rate for the Packaging Robot</H1>
+			</div>
+			<br>
+			<div style="font-weight: bold; font-style: italic; font-size: 20px; font-family: Times New Roman; text-align: center" id="resMessage">  
+			</div>	
+		    <br>
+			<div align="center">
+				<table id="updateRate">
+					<tr>
+						<td align="left" id="rate">PACKAGING RATE (/Minute):</td>
+						<td align="right">
+							<input type="text" name="rateVal" id="rateVal" style="width: 75px;" value="4">
+						</td>
+					</tr>
+					<tr>
+						<td align="left" id="status">STATUS:</td>
+						<td align="right">
+							<input type="text" name="statusVal" id="statusVal" style="width: 75px;" value="ACTIVE" readonly>
+						</td>
+					</tr>	
+					<tr>
+						<td>
+				        	<button type="button" name="resetPage" id="resetPage" onclick='return resetClient();' >
+					        	<Strong>
+					        		<FONT COLOR=BLACK FACE="Times New Roman" SIZE=4>
+					        			<i>Reset Robot</i>
+					        		</FONT>
+					        	</Strong>
+				        	</button>
+						</td>
+						<td></td>
+					</tr>				
+				</table>			
+			</div>
+			<br>
+			<div align="center">
+				<a href=Index.html> <Strong><FONT COLOR=#0000FF FACE="Times New Roman" SIZE=3><i>Back to Index</i></FONT></Strong></a>
+			</div>
+		</div>
+    </BODY>
+</HTML>

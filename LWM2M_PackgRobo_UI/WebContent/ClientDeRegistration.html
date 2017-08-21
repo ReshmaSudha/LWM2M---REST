@@ -1,0 +1,61 @@
+<HTML>
+    <HEAD>
+        <TITLE>Client 4 De-registration</TITLE>  
+		<script>
+			function submitBootstrapReq()
+			{
+				var getSearchKeyNameUrl = "http://localhost:8080/LWM2M_PackgRobo/omaclient/Deregistration/7G7H-9I1J-12052015";
+				var ajaxHttpReq;
+
+				if (window.XMLHttpRequest) {
+				 	ajaxHttpReq=new XMLHttpRequest();
+				} 
+				else {
+					ajaxHttpReq=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				ajaxHttpReq.onreadystatechange = function() {
+				if (ajaxHttpReq.readyState == 4 && ajaxHttpReq.status == 200) {
+				 		var servletRes = ajaxHttpReq.responseText;
+				 		document.getElementById("resMessage").innerText = servletRes;
+				 		if(servletRes.indexOf("failed") != -1){
+				 			document.getElementById("resMessage").style.color = '#FF0000';
+				 		}
+				 		else {
+				 			document.getElementById("resMessage").style.color = '#088A08';
+				 		}
+				   }
+				}
+				ajaxHttpReq.open("DELETE", getSearchKeyNameUrl, true);
+				ajaxHttpReq.send();
+			}
+		</script>	
+    </HEAD>
+
+    <BODY BGCOLOR="#C1C1BB">
+		<div>	
+			<br>
+			<br>
+			<div>
+				<H1 align="center" FACE="Times New Roman">De-Registration for the Packaging Robot</H1>
+			</div>
+			<br>
+			<div style="font-weight: bold; font-style: italic; font-size: 20px; font-family: Times New Roman; text-align: center" id="resMessage">  
+			</div>	
+		    <br>
+			<div align="center">
+	        	<button type="button" name="reqBootStrap" id="reqBootStrap" onclick='return submitBootstrapReq();' >
+		        	<Strong>
+		        		<FONT COLOR=BLACK FACE="Times New Roman" SIZE=4>
+		        			<i>De-Register Client</i>
+		        		</FONT>
+		        	</Strong>
+	        	</button>
+			</div>
+			<br>
+			<div align="center">
+				<a href=Index.html> <Strong><FONT COLOR=#0000FF FACE="Times New Roman" SIZE=3><i>Back to Index</i></FONT></Strong></a>
+			</div>
+		</div>
+    </BODY>
+</HTML>>

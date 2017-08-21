@@ -1,0 +1,61 @@
+<HTML>
+    <HEAD>
+        <TITLE>Client Initiated Bootstrap</TITLE>  
+		<script>
+			function submitBootstrapReq()
+			{
+				var getSearchKeyNameUrl = "http://localhost:8080/LWM2M_AssyRobo/omaclient/Bootstrap/6F6G-8H9I-12052015";
+				var ajaxHttpReq;
+
+				if (window.XMLHttpRequest) {
+				 	ajaxHttpReq=new XMLHttpRequest();
+				} 
+				else {
+					ajaxHttpReq=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				ajaxHttpReq.onreadystatechange = function() {
+				if (ajaxHttpReq.readyState == 4 && ajaxHttpReq.status == 200) {
+				 		var servletRes = ajaxHttpReq.responseText;
+				 		document.getElementById("resMessage").innerText = servletRes;
+				 		if(servletRes.indexOf("failed") != -1){
+				 			document.getElementById("resMessage").style.color = '#FF0000';
+				 		}
+				 		else {
+				 			document.getElementById("resMessage").style.color = '#088A08';
+				 		}
+				   }
+				}
+				ajaxHttpReq.open("GET", getSearchKeyNameUrl, true);
+				ajaxHttpReq.send();
+			}
+		</script>	
+    </HEAD>
+
+    <BODY BGCOLOR="#C1C1BB">
+		<div>	
+			<br>
+			<br>
+			<div>
+				<H1 align="center" FACE="Times New Roman">Client Initiated Bootstrap for the Assembly Robot</H1>
+			</div>
+			<br>
+			<div style="font-weight: bold; font-style: italic; font-size: 20px; font-family: Times New Roman; text-align: center" id="resMessage">  
+			</div>	
+		    <br>
+			<div align="center">
+	        	<button type="button" name="reqBootStrap" id="reqBootStrap" onclick='return submitBootstrapReq();' >
+		        	<Strong>
+		        		<FONT COLOR=BLACK FACE="Times New Roman" SIZE=4>
+		        			<i>Request Bootstrap</i>
+		        		</FONT>
+		        	</Strong>
+	        	</button>
+			</div>
+			<br>
+			<div align="center">
+				<a href=Index.html> <Strong><FONT COLOR=#0000FF FACE="Times New Roman" SIZE=3><i>Back to Index</i></FONT></Strong></a>
+			</div>
+		</div>
+    </BODY>
+</HTML>
